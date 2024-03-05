@@ -10,9 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.jardeuvicente.linkshort.model.Url;
-import com.jardeuvicente.linkshort.model.Users;
+import com.jardeuvicente.linkshort.model.User;
 import com.jardeuvicente.linkshort.repository.UrlRepository;
-import com.jardeuvicente.linkshort.repository.UsersRepository;
+import com.jardeuvicente.linkshort.repository.UserRepository;
 
 @ContextConfiguration
 @SpringBootTest
@@ -22,13 +22,13 @@ public class UrlServiceTest {
     private UrlRepository urlRepository;
 
     @Mock
-    private UsersRepository userRepository;
+    private UserRepository userRepository;
 
     @InjectMocks
     private UrlService urlService;
 
     @InjectMocks
-    private UsersService userService;
+    private UserService userService;
 
     @Test
     public void testShortenUrl() {
@@ -40,7 +40,7 @@ public class UrlServiceTest {
         url.setLongUrl(longUrl);
         url.setHash(hash);
 
-        Users user = new Users();
+        User user = new User();
 
         when(urlRepository.findByLongUrl(longUrl)).thenReturn(url);
 

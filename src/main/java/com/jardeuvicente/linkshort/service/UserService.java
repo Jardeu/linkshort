@@ -4,19 +4,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.jardeuvicente.linkshort.model.Users;
-import com.jardeuvicente.linkshort.repository.UsersRepository;
+import com.jardeuvicente.linkshort.model.User;
+import com.jardeuvicente.linkshort.repository.UserRepository;
 
 @Service
-public class UsersService {
-    private final UsersRepository userRepository;
+public class UserService {
+    private final UserRepository userRepository;
 
-    public UsersService(UsersRepository userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public String register(String email, String name) {
-        Users user = new Users();
+        User user = new User();
 
         user.setName(name);
 
@@ -30,12 +30,12 @@ public class UsersService {
         return email;
     }
 
-    public Users userFindByEmail(String email) {
+    public User userFindByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public List<Users> findAllUsers() {
-        List<Users> user = userRepository.findAll();
+    public List<User> findAllUsers() {
+        List<User> user = userRepository.findAll();
 
         return user;
     }

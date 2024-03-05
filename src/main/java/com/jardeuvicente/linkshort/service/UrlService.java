@@ -8,23 +8,23 @@ import java.util.Random;
 import org.springframework.stereotype.Service;
 
 import com.jardeuvicente.linkshort.model.Url;
-import com.jardeuvicente.linkshort.model.Users;
+import com.jardeuvicente.linkshort.model.User;
 import com.jardeuvicente.linkshort.repository.UrlRepository;
-import com.jardeuvicente.linkshort.repository.UsersRepository;
+import com.jardeuvicente.linkshort.repository.UserRepository;
 
 @Service
 public class UrlService {
     private final UrlRepository urlRepository;
-    private final UsersRepository usersRepository;
+    private final UserRepository usersRepository;
 
-    public UrlService(UrlRepository urlRepository, UsersRepository usersRepository) {
+    public UrlService(UrlRepository urlRepository, UserRepository usersRepository) {
         this.urlRepository = urlRepository;
         this.usersRepository = usersRepository;
     }
 
     public String shortenUrl(String longUrl, Long userId) {
         Url url = urlRepository.findByLongUrl(longUrl);
-        Optional<Users> user = usersRepository.findById(userId);
+        Optional<User> user = usersRepository.findById(userId);
         Date createdDate = new Date();
 
         if (url != null) {

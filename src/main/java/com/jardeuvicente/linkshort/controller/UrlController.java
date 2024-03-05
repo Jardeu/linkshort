@@ -3,6 +3,8 @@ package com.jardeuvicente.linkshort.controller;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,26 +26,27 @@ public class UrlController {
     }
 
     @PostMapping("/shorten")
-    public String shortenUrl(@RequestBody Url bodyUrl) {
-        return urlService.shortenUrl(bodyUrl.getLongUrl(), bodyUrl.getUser().getId());
+    public ResponseEntity<String> shortenUrl(@RequestBody Url bodyUrl) {
+        String shortUrl = urlService.shortenUrl(bodyUrl.getLongUrl(), bodyUrl.getUser().getId());
+        return new ResponseEntity<>(shortUrl, HttpStatus.CREATED);
     }
 
     @GetMapping("/urls")
     public List<Url> listUrls() throws IOException {
-        List<Url> url = urlService.findAllUrl();
+        List<Url> listUrls = urlService.findAllUrl();
 
-        return url;
+        return listUrls;
     }
 
     @GetMapping("/{hash}")
-    public Url redirect(@PathVariable String hash, HttpServletResponse response) throws IOException {
-        Url url = urlService.getLongUrl(hash);
-
-        return url;
+    public void redirect(@PathVariable String hash, HttpServletResponse response) throws IOException {
+        String url = urlService.getLongUrl(hash).getLongUrl();
+        response.sendRedirect(url);
     }
 
     @DeleteMapping("/urls/delete/{id}")
-    public String deleteUrl(@PathVariable Long id) throws IOException {
-        return urlService.deleteUrl(id);
+    public ResponseEntity<String> deleteUrl(@PathVariable Long id) {
+        String deleteMessage = urlService.deleteUrl(id);
+        return new ResponseEntity<>(deleteMessage, HttpStatus.OK);
     }
 }

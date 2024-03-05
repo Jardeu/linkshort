@@ -10,29 +10,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jardeuvicente.linkshort.model.Users;
-import com.jardeuvicente.linkshort.service.UsersService;
+import com.jardeuvicente.linkshort.model.User;
+import com.jardeuvicente.linkshort.service.UserService;
 
 @RestController
-public class UsersController {
-    private final UsersService userService;
+public class UserController {
+    private final UserService userService;
 
-    public UsersController(UsersService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("/users/register")
-    public String registerUser(@RequestBody Users user) {
+    public String registerUser(@RequestBody User user) {
         return userService.register(user.getEmail(), user.getName());
     }
 
     @GetMapping("/users/{email}")
-    public Users userFindByEmail(@PathVariable String email) throws IOException {
+    public User userFindByEmail(@PathVariable String email) throws IOException {
         return userService.userFindByEmail(email);
     }
 
     @GetMapping("/users/")
-    public List<Users> findAllUsers() throws IOException {
+    public List<User> findAllUsers() throws IOException {
         return userService.findAllUsers();
     }
 

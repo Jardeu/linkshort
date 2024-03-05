@@ -9,24 +9,24 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import com.jardeuvicente.linkshort.model.Users;
-import com.jardeuvicente.linkshort.repository.UsersRepository;
+import com.jardeuvicente.linkshort.model.User;
+import com.jardeuvicente.linkshort.repository.UserRepository;
 
 @ContextConfiguration
 @SpringBootTest
-public class UsersServiceTest {
+public class UserServiceTest {
     @Mock
-    private UsersRepository userRepository;
+    private UserRepository userRepository;
 
     @InjectMocks
-    private UsersService userService;
+    private UserService userService;
 
     @Test
     public void testRegisterUser() {
         String userName = "Jardeu";
         String email = "jardeu219@gmail.com";
 
-        Users user = new Users();
+        User user = new User();
         user.setName(userName);
         user.setEmail(email);
 

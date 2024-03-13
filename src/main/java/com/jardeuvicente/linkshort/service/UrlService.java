@@ -6,66 +6,77 @@ import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jardeuvicente.linkshort.model.Url;
 import com.jardeuvicente.linkshort.model.User;
 import com.jardeuvicente.linkshort.repository.UrlRepository;
-import com.jardeuvicente.linkshort.repository.UserRepository;
 
 @Service
 public class UrlService {
     private final UrlRepository urlRepository;
-    private final UserRepository usersRepository;
+    private UserService userService;
 
-    public UrlService(UrlRepository urlRepository, UserRepository usersRepository) {
+    public UrlService(UrlRepository urlRepository) {
         this.urlRepository = urlRepository;
-        this.usersRepository = usersRepository;
     }
 
+    @Transactional
     public String shortenUrl(String longUrl, Long userId) {
         Url url = urlRepository.findByLongUrl(longUrl);
-        Optional<User> user = usersRepository.findById(userId);
+        User user = userService.findById(userId);
         Date createdDate = new Date();
 
         if (url != null) {
-            return url.getHash();
+            return url.getCode();
         }
 
         url = new Url();
         url.setLongUrl(longUrl);
 
-        String hash = generateHash();
-        while (urlRepository.findByHash(hash) != null) {
-            hash = generateHash();
+        String code = generateCode();
+        while (urlRepository.findByCode(code) != null) {
+            code = generateCode();
         }
-        url.setHash(hash);
-        url.setUser(user.get());
+        url.setCode(code);
+        url.setUser(user);
         url.setCreatedDate(createdDate);
 
         urlRepository.save(url);
 
-        return hash;
+        return code;
     }
 
-    public Url getLongUrl(String hash) {
-        Url url = urlRepository.findByHash(hash);
+    public Url findById(Long id) {
+        Optional<Url> url = this.urlRepository.findById(id);
+        return url.orElseThrow(() -> new RuntimeException(
+                "Url não encontrada!"));
+    }
+
+    public Url findLongUrl(String code) {
+        Url url = urlRepository.findByCode(code);
 
         return url;
     }
 
-    public List<Url> findAllUrl() {
+    public List<Url> findAll() {
         List<Url> url = urlRepository.findAll();
 
         return url;
     }
 
-    public String deleteUrl(Long id) {
-        urlRepository.deleteById(id);
+    @Transactional
+    public void delete(Long id) {
+        findById(id);
 
-        return "Url deletada com sucesso";
+        try {
+            this.urlRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Não é possível excluir pois há entidades relacionadas");
+        }
     }
 
-    private String generateHash() {
+    private String generateCode() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         Random random = new Random();

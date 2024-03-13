@@ -24,7 +24,7 @@ public class Url {
     private String longUrl;
 
     @Column
-    private String hash;
+    private String code;
 
     @Column
     private Date createdDate;
@@ -53,12 +53,12 @@ public class Url {
         this.longUrl = longUrl;
     }
 
-    public String getHash() {
-        return hash;
+    public String getCode() {
+        return code;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public Date getCreatedDate() {

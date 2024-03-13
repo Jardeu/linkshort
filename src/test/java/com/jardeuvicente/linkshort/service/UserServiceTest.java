@@ -27,13 +27,13 @@ public class UserServiceTest {
         String email = "jardeu219@gmail.com";
 
         User user = new User();
-        user.setName(userName);
+        user.setUsername(userName);
         user.setEmail(email);
 
         when(userRepository.findByEmail(email)).thenReturn(user);
 
-        String result = userService.register(userName, email);
+        User result = this.userService.create(user);
 
-        assertEquals(email, result);
+        assertEquals(user, result);
     }
 }

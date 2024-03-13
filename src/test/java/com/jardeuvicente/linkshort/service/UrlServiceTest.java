@@ -34,11 +34,11 @@ public class UrlServiceTest {
     public void testShortenUrl() {
         String longUrl = "https://www.example.com";
 
-        String hash = "abc123";
+        String code = "abc123";
 
         Url url = new Url();
         url.setLongUrl(longUrl);
-        url.setHash(hash);
+        url.setCode(code);
 
         User user = new User();
 
@@ -46,7 +46,7 @@ public class UrlServiceTest {
 
         String result = urlService.shortenUrl(longUrl, user.getId());
 
-        assertEquals(hash, result);
+        assertEquals(code, result);
     }
 
 }

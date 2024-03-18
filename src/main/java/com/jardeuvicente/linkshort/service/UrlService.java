@@ -23,8 +23,8 @@ public class UrlService {
 
     @Transactional
     public String shortenUrl(String longUrl, Long userId) {
-        Url url = urlRepository.findByLongUrl(longUrl);
-        User user = userService.findById(userId);
+        Url url = this.urlRepository.findByLongUrl(longUrl);
+        User user = this.userService.findById(userId);
         Date createdDate = new Date();
 
         if (url != null) {
@@ -35,14 +35,14 @@ public class UrlService {
         url.setLongUrl(longUrl);
 
         String code = generateCode();
-        while (urlRepository.findByCode(code) != null) {
+        while (this.urlRepository.findByCode(code) != null) {
             code = generateCode();
         }
         url.setCode(code);
         url.setUser(user);
         url.setCreatedDate(createdDate);
 
-        urlRepository.save(url);
+        this.urlRepository.save(url);
 
         return code;
     }
@@ -54,15 +54,15 @@ public class UrlService {
     }
 
     public Url findLongUrl(String code) {
-        Url url = urlRepository.findByCode(code);
+        Url url = this.urlRepository.findByCode(code);
 
         return url;
     }
 
-    public List<Url> findAll() {
-        List<Url> url = urlRepository.findAll();
+    public List<Url> findAllByUserId(Long userId) {
+        List<Url> urls = this.urlRepository.findByUser_Id(userId);
 
-        return url;
+        return urls;
     }
 
     @Transactional

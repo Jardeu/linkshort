@@ -18,7 +18,7 @@ import com.jardeuvicente.linkshort.model.User;
 import com.jardeuvicente.linkshort.service.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 

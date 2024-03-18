@@ -33,11 +33,11 @@ public class UrlController {
         return new ResponseEntity<>(shortUrl, HttpStatus.CREATED);
     }
 
-    @GetMapping("")
-    public List<Url> listUrls() throws IOException {
-        List<Url> listUrls = urlService.findAll();
+    @GetMapping("/user{userId}")
+    public ResponseEntity<List<Url>> findAllByUserId(@PathVariable Long userId) throws IOException {
+        List<Url> urls = urlService.findAllByUserId(userId);
 
-        return listUrls;
+        return ResponseEntity.ok().body(urls);
     }
 
     @GetMapping("/{code}")

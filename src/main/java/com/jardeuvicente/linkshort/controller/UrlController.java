@@ -19,7 +19,7 @@ import com.jardeuvicente.linkshort.service.UrlService;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/urls")
+@RequestMapping("/url")
 public class UrlController {
     private final UrlService urlService;
 
@@ -29,25 +29,25 @@ public class UrlController {
 
     @PostMapping("/shorten")
     public ResponseEntity<String> shortenUrl(@RequestBody Url bodyUrl) {
-        String shortUrl = urlService.shortenUrl(bodyUrl.getLongUrl(), bodyUrl.getUser().getId());
+        String shortUrl = this.urlService.shortenUrl(bodyUrl.getLongUrl(), bodyUrl.getUser().getId());
         return new ResponseEntity<>(shortUrl, HttpStatus.CREATED);
     }
 
-    @GetMapping("/user{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<List<Url>> findAllByUserId(@PathVariable Long userId) throws IOException {
-        List<Url> urls = urlService.findAllByUserId(userId);
+        List<Url> urls = this.urlService.findAllByUserId(userId);
 
         return ResponseEntity.ok().body(urls);
     }
 
     @GetMapping("/{code}")
     public void redirect(@PathVariable String code, HttpServletResponse response) throws IOException {
-        String url = urlService.findLongUrl(code).getLongUrl();
+        String url = this.urlService.findLongUrl(code).getLongUrl();
         response.sendRedirect(url);
     }
 
     @DeleteMapping("/{id}")
     public void deleteUrl(@PathVariable Long id) {
-        urlService.delete(id);
+        this.urlService.delete(id);
     }
 }

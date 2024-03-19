@@ -17,8 +17,9 @@ public class UrlService {
     private final UrlRepository urlRepository;
     private UserService userService;
 
-    public UrlService(UrlRepository urlRepository) {
+    public UrlService(UrlRepository urlRepository, UserService userService) {
         this.urlRepository = urlRepository;
+        this.userService = userService;
     }
 
     @Transactional

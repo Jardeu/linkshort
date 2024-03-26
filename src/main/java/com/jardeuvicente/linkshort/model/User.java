@@ -13,6 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Entity
@@ -23,12 +25,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(length = 100, nullable = false, unique = true)
     private String username;
 
+    @Email
     @Column
     private String email;
 
+    @NotBlank
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column(length = 60, nullable = false)
     private String password;

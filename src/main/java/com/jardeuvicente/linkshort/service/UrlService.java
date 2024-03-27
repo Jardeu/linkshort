@@ -2,6 +2,7 @@ package com.jardeuvicente.linkshort.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jardeuvicente.linkshort.model.Url;
 import com.jardeuvicente.linkshort.model.User;
 import com.jardeuvicente.linkshort.repository.UrlRepository;
+import com.jardeuvicente.linkshort.service.exception.DataBindingViolationException;
+import com.jardeuvicente.linkshort.service.exception.ObjectNotFoundException;
 
 @Service
 public class UrlService {
@@ -49,9 +52,11 @@ public class UrlService {
     }
 
     public Url findById(Long id) {
+        Objects.requireNonNull(id, "Id can't be null!");
+
         Optional<Url> url = this.urlRepository.findById(id);
-        return url.orElseThrow(() -> new RuntimeException(
-                "Url não encontrada!"));
+        return url.orElseThrow(() -> new ObjectNotFoundException(
+                "Url not found!"));
     }
 
     public Url findLongUrl(String code) {
@@ -68,12 +73,12 @@ public class UrlService {
 
     @Transactional
     public void delete(Long id) {
-        findById(id);
+        Objects.requireNonNull(id, "Id can't be null!");
 
         try {
             this.urlRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("Não é possível excluir pois há entidades relacionadas");
+            throw new DataBindingViolationException("Unable to delete as there are related entities!");
         }
     }
 

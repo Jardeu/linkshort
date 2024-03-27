@@ -1,6 +1,7 @@
 package com.jardeuvicente.linkshort.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jardeuvicente.linkshort.model.User;
 import com.jardeuvicente.linkshort.repository.UserRepository;
+import com.jardeuvicente.linkshort.service.exception.DataBindingViolationException;
+import com.jardeuvicente.linkshort.service.exception.ObjectNotFoundException;
 
 @Service
 public class UserService {
@@ -32,9 +35,11 @@ public class UserService {
     }
 
     public User findById(Long id) {
+        Objects.requireNonNull(id, "Id can't be null!");
+
         Optional<User> user = userRepository.findById(id);
-        return user.orElseThrow(() -> new RuntimeException(
-                "Usuário não encontrado"));
+        return user.orElseThrow(() -> new ObjectNotFoundException(
+                "User not found!"));
     }
 
     public User findByEmail(String email) {
@@ -51,12 +56,12 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
-        findById(id);
+        Objects.requireNonNull(id, "Id can't be null!");
 
         try {
             this.userRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("Não é possível excluir pois há entidades relacionadas");
+            throw new DataBindingViolationException("Unable to delete as there are related entities!");
         }
     }
 }

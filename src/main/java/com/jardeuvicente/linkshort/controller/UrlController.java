@@ -17,6 +17,7 @@ import com.jardeuvicente.linkshort.model.Url;
 import com.jardeuvicente.linkshort.service.UrlService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/url")
@@ -28,7 +29,7 @@ public class UrlController {
     }
 
     @PostMapping("/shorten")
-    public ResponseEntity<String> shortenUrl(@RequestBody Url bodyUrl) {
+    public ResponseEntity<String> shortenUrl(@Valid @RequestBody Url bodyUrl) {
         String shortUrl = this.urlService.shortenUrl(bodyUrl.getLongUrl(), bodyUrl.getUser().getId());
         return new ResponseEntity<>(shortUrl, HttpStatus.CREATED);
     }
